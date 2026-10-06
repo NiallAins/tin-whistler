@@ -1,0 +1,323 @@
+<html>
+
+<head>
+  <title>
+    TinWhistler
+  </title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="./style.css" />
+</head>
+
+<body>
+  <div class="page-container">
+    <h1>
+      TinWhistler
+      <span>Whistle & flute guides from ABC tune notation</span>
+    </h1>
+    <div class="controls-container">
+      <div class="textarea">
+        <textarea
+          id="input"
+          placeholder="Paste ABC notation..."
+          oninput="render()"
+          spellcheck="false"
+        ></textarea>
+      </div>
+
+      <div class="controls">
+        <button onclick="
+          event.target.classList.toggle('open');
+          radios.classList.toggle('open');
+        ">
+          Whistle key
+        </button>
+        <div id="radios">
+          <div class="radios">
+            <input
+              type="radio"
+              name="key"
+              value="D"
+              id="D"
+              checked
+              onclick="keyNote = event.target.value; render();"
+            />
+            <label for="D">D</label>
+            <input
+              type="radio"
+              name="key"
+              value="E"
+              id="E"
+              onclick="keyNote = event.target.value; render();"
+            />
+            <label for="E">E</label>
+            <input
+              type="radio"
+              name="key"
+              value="F"
+              id="F"
+              onclick="keyNote = event.target.value; render();"
+            />
+            <label for="F">F</label>
+            <input
+              type="radio"
+              name="key"
+              value="G"
+              id="G"
+              onclick="keyNote = event.target.value; render();"
+            />
+            <label for="G">G</label>
+            <input
+              type="radio"
+              name="key"
+              value="A"
+              id="A"
+              onclick="keyNote = event.target.value; render();"
+            />
+            <label for="A">A</label>
+            <input
+              type="radio"
+              name="key"
+              value="B"
+              id="B"
+              onclick="keyNote = event.target.value; render();"
+            />
+            <label for="B">B</label>
+            <input
+              type="radio"
+              name="key"
+              value="C"
+              id="C"
+              onclick="keyNote = event.target.value; render();"
+            />
+            <label for="C">C</label>
+          </div>
+
+          <div class="radios">
+            <input
+              type="radio"
+              name="acc"
+              value=""
+              id="n"
+              checked
+              onclick="keyAcc = event.target.value; render();"
+            />
+            <label for="n">♮</label>
+            <input
+              type="radio"
+              name="acc"
+              value="b"
+              id="b"
+              onclick="keyAcc= event.target.value; render();"
+            />
+            <label for="b">♭</label>
+            <input
+              type="radio"
+              name="acc"
+              value="#"
+              id="s"
+              onclick="keyAcc = event.target.value; render();"
+            />
+            <label for="s">#</label>
+          </div>
+        </div>
+
+        <button onclick="
+          event.target.classList.toggle('open');
+          displays.classList.toggle('open');
+        ">
+          Display options
+        </button>
+        <div id="displays">
+          <div class="size">
+            <button onclick="updateSize(-2)">
+              Size &minus;
+            </button>
+            <button onclick="updateSize(2)">
+              Size +
+            </button>
+          </div>
+          <button
+            class="active"
+            onclick="
+              showBeat = !showBeat;
+              event.target.classList.toggle('active');
+              render();
+            "
+          >
+            Beat
+          </button>
+          <button
+            class="active"
+            onclick="
+              showNote = !showNote;
+              event.target.classList.toggle('active');
+              render();
+            "
+          >
+            Notes
+          </button>
+          <button
+            onclick="
+              showFrame = !showFrame;
+              event.target.classList.toggle('active');
+              render();
+            "
+          >
+            Frame
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="actions">
+      <a
+        href="https://thesession.org/tunes"
+        target="_blank"
+      >
+        Find tunes on TheSession
+      </a>
+      <button
+        class="textarea__load"
+        onclick="loadRandom()"
+      >
+        Load random tune
+      </button>
+      <br/>
+      <button onclick="print()">
+        Print
+      </button>
+      <button
+        onclick="
+          helpModal.classList.add('open');
+          helpModalBg.classList.add('open');
+        "
+      >
+        Help
+      </button>
+    </div>
+
+    <div
+      id="helpModalBg"
+      class="help__bg"
+      tabindex="0"
+      onclick="
+        helpModal.classList.remove('open');
+        helpModalBg.classList.remove('open');
+      "
+    ></div>
+    <div
+      id="helpModal"
+      class="help"
+    >
+      <button
+        class="help__close"
+        onclick="
+          helpModal.classList.remove('open');
+          helpModalBg.classList.remove('open');
+        "
+      >
+        &times;
+      </button>
+      <div class="example">
+        <div
+          class="
+            song__part
+            song__part--tuple
+          "
+          style="--grace: 1"
+        >
+          <div class="
+            song__bar
+            song__bar--beat
+            song__bar--note
+          ">
+            <div
+              class="
+                comp-whistle
+                comp-whistle--note
+                comp-whistle--grace
+              "
+            >
+              <span class="comp-whistle__effect">
+              </span>
+              <span class="
+                comp-whistle__hole
+                comp-whistle__hole--closed
+              "></span>
+              <span class="comp-whistle__hole"></span>
+              <span class="comp-whistle__hole"></span>
+              <span class="comp-whistle__hole"></span>
+              <span class="comp-whistle__hole"></span>
+              <span class="comp-whistle__hole"></span>
+              <div class="comp-whistle__label">
+                B
+              </div>
+            </div>
+            <div
+              class="
+                comp-whistle
+                comp-whistle--note
+              "
+              style="--tuple: 2"
+            >
+              <span class="comp-whistle__effect">
+                <span class="comp-whistle__effect--trill">~</span>
+                <span class="comp-whistle__effect--stoca">·</span>
+                <span class="comp-whistle__effect--octave">
+                  <span>^</span>
+                </span>
+              </span>
+              <span class="
+                comp-whistle__hole
+                comp-whistle__hole--closed
+              "></span>
+              <span class="
+                comp-whistle__hole
+                comp-whistle__hole--closed
+              "></span>
+              <span class="
+                comp-whistle__hole
+                comp-whistle__hole--closed
+              "></span>
+              <span class="
+                comp-whistle__hole
+                comp-whistle__hole--closed
+              ">~</span>
+              <span class="
+                comp-whistle__hole
+                comp-whistle__hole--half
+              "></span>
+              <span class="comp-whistle__hole"></span>
+              <div class="comp-whistle__label">
+                F#<span>^</span>
+              </div>
+              <div class="comp-whistle__tuple">3</div>
+            </div>
+          </div>
+        </div>
+        <div class="example__label">
+          <span>Staccato</span>
+          <span>Tremolo</span>
+          <span>Upper octave</span>
+          <span>Covered hole</span>
+          <span>Roll / Trill / Accent</span>
+          <span>Half-covered hole</span>
+          <span>Open hole</span>
+          <span>Beat line</span>
+          <span>Tuplet beat group</span>
+          <span>Upper octave</span>
+          <span>Grace<br/>note</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="output-container">
+    <div id="output"></div>
+  </div>
+
+  <script src="./script.js"></script>
+</body>
+
+</html>
